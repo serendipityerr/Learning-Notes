@@ -241,7 +241,7 @@ $$
 \log \bar{\alpha}_t = \sum_{t=1}^T \log\alpha_t = \sum_{t=1}^T \log(1-\beta_t) < -\sum_{t=1}^T \beta_t = -\frac{\beta_1 +\beta_T}{2} T
 $$
 
-代入 $T=1000$, $\beta_1 = 10^{-4}$ 和 $\beta_T = 0.02$，因此，$\bar{\alpha}_t \approx e^{-10}$ 可以近似于 $0$，所以这样的 $\beta_t$ 是符合标准的。
+代入 $T=1000$, $\beta_1 = 10^{-4}$ 和 $\beta_T = 0.02$，因此，$\sqrt{\bar{\alpha}_t} \approx e^{-5}$ 可以近似于 $0$，所以这样的 $\beta_t$ 是符合标准的。
 
 ---
 ### Code Implementations
