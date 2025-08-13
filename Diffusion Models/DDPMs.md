@@ -249,3 +249,9 @@ $$
 emmmm这部分等我什么时候手撕了DDPMs再来更新（恨）
 
 To Be Continued...
+
+
+---
+### Reference
+1. **Denoising Diffusion Probabilistic Models.**  [[pdf](https://arxiv.org/pdf/2006.11239)]
+2. **Understanding Diffusion Models: A Unified Perspective.**  [[pdf](https://arxiv.org/pdf/2208.11970)]
