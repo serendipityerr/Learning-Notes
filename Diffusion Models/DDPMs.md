@@ -5,7 +5,7 @@ $$
 z \sim \mathcal{N}(0, I) \longrightarrow x \sim q_{\text{data}}(x)
 $$
 
-<div align="center"><img src="imgs/main.png" width="500px"/></div>
+<div align="center"><img src="imgs/main.png" width="600px"/></div>
 
 ---
 ### 前向过程 Forward Process
@@ -154,7 +154,7 @@ $$
 
 
 
-#### 中间的 $T-1$ 项 $L_t$  ($1 \le t \le T-1$)。
+#### 中间的 $T-1$ 项 $L_t$  ($1 \le t \le T-1$)
 
 我们先考虑 $q(x_{t-1}|x_{t},x_{0})$ 这个概率分布，因为这是一个确定的分布，根据贝叶斯(Bayes)定理和前向过程定义的概率：
 $$
@@ -250,7 +250,7 @@ $$
 4. 把 $x_t$ 和 $t$ 输入神经网络并返回预测的噪声 $\varepsilon_\theta$。
 5. 计算Loss $\mathcal{L}$并对 $\theta$ 进行梯度下降进行优化，直到收敛。
 
-<div align="center"><img src="imgs/training_algorithm.png" width="300px"/></div>
+<div align="center"><img src="imgs/training_algorithm.png" width="350px"/></div>
 
 
 #### 采样算法 Sampling/Inference Algorithm
@@ -272,7 +272,7 @@ $$
 3. $t$ 到 $t-1$ 往前更新一步：$x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1-\bar{\alpha}_{t}}} \varepsilon_\theta(x_t, t) \right) + \frac{\beta_t(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t} z$
 4. 循环 $T$ 步，最终返回生成的 $\hat{x}_0$。
 
-<div align="center"><img src="imgs/sampling_algorithm.png" width="300px"/></div>
+<div align="center"><img src="imgs/sampling_algorithm.png" width="350px"/></div>
 
 
 需要特别注意的细节是，最后一步要区分训练与生成：
@@ -280,8 +280,28 @@ $$
 + 为了生成图像（采样时）：我们并不执行前面提到的解码器这个积分过程。我们采用算法的确定性最后一步（上面提到的为了生成最终的图像时不引入额外的噪声），即 $x_0 = \mu_\theta(x_1, 1)$。这个结果是一个连续值（在$[-1, 1]$内），我们直接将其缩放回 $[0, 255]$ 并取整，作为最终的生成图像来显示。这样做是为了获得视觉上最清晰、最平滑的图像。
 
 ---
+
+### $\beta_t$ 的选取
+现在我们回过头来看 $\beta_t$ 应该如何选取：为了尽可能满足最终 $x_T \sim \mathcal{N}(0, I)$，我们希望 $\sqrt{\bar{\alpha}_T} \approx 0$。DDPMs原文中选取了总步长 $T=1000$，线性的 $\beta_t$ (linear schedule)，满足 $\beta_1 = 10^{-4}$ 和 $\beta_T = 0.02$ 单调递增，（也就是 $\beta_t = 10^{-4} + (t-1) \frac{0.02 - 10^{-4}}{T-1}$），对应的 $\alpha_t$ 就满足 $\alpha_1 = 1-10^{-4}$ 和 $\alpha_T = 1-0.02$ 单调递减（$\alpha_t = 1 - \beta_t$）。简单估算一下 $\bar{\alpha}_t$:
+
+$$
+\log \bar{\alpha}_t = \sum_{t=1}^T \log\alpha_t = \sum_{t=1}^T \log(1-\beta_t) < -\sum_{t=1}^T \beta_t = -\frac{\beta_1 +\beta_T}{2} T
+$$
+
+代入 $T=1000$, $\beta_1 = 10^{-4}$ 和 $\beta_T = 0.02$，因此，$\sqrt{\bar{\alpha}_t} \approx e^{-5}$ 可以近似于 $0$，所以这样的 $\beta_t$ 是符合标准的。
+
+
+---
 ### 代码实现 Code Implementations
 
 emmmm这部分等我什么时候手撕了DDPMs再来更新（恨）
 
 To Be Continued...
+
+---
+
+### 参考文献 Reference
+
+1. **Denoising Diffusion Probabilistic Models.**  [[pdf](https://arxiv.org/pdf/2006.11239)]
+
+2. **Understanding Diffusion Models: A Unified Perspective.**  [[pdf](https://arxiv.org/pdf/2208.11970)]
