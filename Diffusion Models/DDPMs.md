@@ -95,7 +95,7 @@ $$
 
 #### 第一项 $L_0$ 
 
-这一项在DDPM的实现中是通过高斯离散编码器(independent discrete decoder)实现的，这一块晚点来补充具体实现。
+这一项在DDPMs的实现中是通过高斯离散编码器(independent discrete decoder)实现的，代码中大概是这样的：
 ```py
 # === Log likelihood calculation ===
 def _vb_terms_bpd(self, denoise_fn, x_start, x_t, t, *, clip_denoised: bool, return_pred_xstart: bool):
@@ -116,7 +116,7 @@ def _vb_terms_bpd(self, denoise_fn, x_start, x_t, t, *, clip_denoised: bool, ret
 	return (output, pred_xstart) if return_pred_xstart else output
 ```
 
-为什么要这么做呢？模型经过 $T − 1$ 步去噪后，在最后一步预测的是一个连续的高斯分布 $\mathcal{N}(x_0;\mu_\theta(x_1,1),\sigma_1^2)$，其均值 $\mu_\theta(x_1,1)$ 是一个在 $[−1,1]$ 区间内的连续值（从连续区间内选定的值）。然而，实际的图像空间却是离散的，对于一个连续的概率分布，任何单个离散点的概率都为零，这就会让Loss出现问题。因此，DDPMs设计了这个编码器，把 $p_{\theta}(x_{0}|x_{1})$ 定义为如下表达式：
+为什么要这么做呢？从数学上来说，模型经过 $T − 1$ 步去噪后，在最后一步预测的是一个连续的高斯分布 $\mathcal{N}(x_0;\mu_\theta(x_1,1),\sigma_1^2)$，其均值 $\mu_\theta(x_1,1)$ 是一个在 $[−1,1]$ 区间内的连续值（从连续区间内选定的值）。然而，实际的图像空间却是离散的，对于一个连续的概率分布，任何单个离散点的概率都为零，这就会让Loss出现问题。因此，DDPMs设计了这个编码器，把 $p_{\theta}(x_{0}|x_{1})$ 定义为如下表达式：
 
 $$
 p_\theta(x_0|x_1)=\prod_{i=1}^D\int_{\delta_-(x_0^i)}^{\delta_+(x_0^i)}\mathcal{N}(x;\mu_\theta^i(x_1,1),\sigma_1^2)dx
@@ -133,8 +133,8 @@ $$
 $$
 \delta_-(x)=\left\{
 \begin{array}
-{cc}-\infty & \mathrm{if}\ x=1 \\
-x-\frac{1}{255} & \mathrm{if}\ x<1
+{cc}-\infty & \mathrm{if}\ x=-1 \\
+x-\frac{1}{255} & \mathrm{if}\ x>-1
 \end{array}\right.
 $$
 
