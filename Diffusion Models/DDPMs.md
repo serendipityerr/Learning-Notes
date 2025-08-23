@@ -1,5 +1,6 @@
 ## Denoising Diffusion Probabilistic Models (DDPMs)
 
+### 引言 Introduction
 目的：从随机噪声（标准正态分布）中生成数据样本（e.g., 一张猫猫的图片）。
 $$
 z \sim \mathcal{N}(0, I) \longrightarrow x \sim q_{\text{data}}(x)
