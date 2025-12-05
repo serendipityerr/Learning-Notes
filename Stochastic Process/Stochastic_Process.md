@@ -155,7 +155,7 @@ $$
 $$
 \begin{aligned}
 P(N(s) = k \mid N(t) = n) &= \frac{P(N(s) = k) P(N(t) = n \mid N(s) = k)}{P(N(t) = n)} \\
-&= \frac{P(N(s) = k) P(N(t-s) = n-k)}{P(N(t) = n)} \\
+&= \frac{P(N(s) = k) P(N(s,t] = n-k)}{P(N(t) = n)} \\
 &= \frac{\frac{(\lambda s)^k}{k!} e^{-\lambda s} \frac{(\lambda (t - s))^{n-k}}{(n - k)!} e^{-\lambda (t - s)}}{\frac{(\lambda t)^k}{k!} e^{-\lambda t}} \\
 &= \frac{n!}{k!(n-k)!} \frac{s^k (t-s)^{n-k}}{t^k} \\
 &= C^k_n \left(\frac{s}{t}\right)^k \left(1-\frac{s}{t}\right)^{n-k} 
