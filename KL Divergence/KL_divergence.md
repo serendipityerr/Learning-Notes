@@ -14,6 +14,7 @@ $$
 D_{\text{KL}}(p \ \Vert \ q) = \int_{\mathcal{X}} p(x) \log \frac{p(x)}{q(x)} dx = \mathbb{E}_{x \sim p(x)} \left[ \log \frac{p(x)}{q(x)} \right].
 $$
 In the following sections, we mainly focus on the continuous version.
+
 ### Key Properties
 
 1. **Non-negativity (Gibbs' Inequality)**: $D_{\text{KL}}(p \ \Vert \ q) \geq 0$ iff $p(x) = q(x)$ (almost anywhere). 
@@ -21,7 +22,9 @@ In the following sections, we mainly focus on the continuous version.
 
 ## Forward KL vs. Reverse KL
 
-In machine learning, we often aim to minimize the discrepancy between a true distribution $p(x)$ and a model distribution $q_\theta(x)$. The optimization objective varies depending on which distribution is placed in the expectation operator.
+In machine learning, we often aim to minimize the discrepancy between a true distribution $p(x)$ and a model distribution $q_\theta(x)$. The optimization objective varies depending on which distribution is placed in the expectation operator. Define the two optimization objectives:
+1. forward KL divergence: $\min_{q} D_{\text{KL}}(p \ \Vert \ q)$
+2. reverse KL divergence: $\min_{q} D_{\text{KL}}(q \ \Vert \ p)$
 
 ### Ideal Cases
 In ideal scenario, we have
